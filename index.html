@@ -1,49 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Photo to PDF Converter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+  <title>Photo to PDF Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <h1>Photo to PDF Converter</h1>
-    <div class="container">
-        <form id="uploadForm" enctype="multipart/form-data">
-            <div class="form-group">
-                <input type="file" id="photoInput" name="photo" accept="image/*" required>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn">Convert to PDF</button>
-            </div>
-        </form>
-    </div>
+  <h1>Photo to PDF Converter</h1>
+  <div class="container">
+    <input type="file" id="photoInput" accept="image/*" required>
+    <button onclick="convertToPdf()" class="btn">Convert to PDF</button>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+  <script>
+    function convertToPdf() {
+      var photoInput = document.getElementById('photoInput');
+      var file = photoInput.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var imgData = e.target.result;
+        var pdf = new jsPDF();
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+        pdf.save('converted.pdf');
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
 </body>
 </html>
